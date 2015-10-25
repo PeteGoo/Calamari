@@ -47,6 +47,17 @@ namespace Calamari.Tests.Fixtures.ConfigurationTransforms
             PerformTest(GetFixtureResouce("Samples", "Bad.config"), GetFixtureResouce("Samples", "Web.Release.config"));
         }
 
+
+        [Test]
+        [Category(TestEnvironment.CompatableOS.Windows)] //Problem with XML on Linux
+        public void AuthorizationSettingsTestConfig()
+        {
+            var text = PerformTest(GetFixtureResouce("Samples", "ReplaceRoot.config"), GetFixtureResouce("Samples", "ReplaceRoot.Test.config"));
+            var contents = XDocument.Parse(text);
+            
+            Assert.AreEqual(contents.Root.Attribute("foo").Value, "True");
+        }
+
         string PerformTest(string configurationFile, string transformFile)
         {
             var temp = Path.GetTempFileName();
